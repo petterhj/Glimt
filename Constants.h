@@ -6,12 +6,17 @@
 #define MENU              3
 #define ACTIVITY          4
 
+#define BATTERY_FULL      1
+#define BATTERY_HALF      2
+#define BATTERY_EMPTY     3
+#define BATTERY_CHARGING  4
+
 // Debug
 #define DEBUG             true
 
 // Radio
 #define RADIO_PIN         6
-#define RADIO_DELAY       1000
+#define RADIO_DELAY       500
 
 // LEDs
 #define LEDS_PIN          8

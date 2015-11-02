@@ -15,6 +15,9 @@ class Screen
     Screen();
     void init();
 
+    void setBattery(int state);
+    void drawBattery();
+
     void homecare(bool on);
     void snap(bool on);
     void menu(bool on);
@@ -25,6 +28,7 @@ class Screen
     Adafruit_ILI9341* screen;
     
   private:
+    int batteryState;
     uint16_t read16(File &f);
     uint32_t read32(File &f);
 

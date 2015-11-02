@@ -1,6 +1,8 @@
 #include "Screen.h"
 
-// Screen
+// ===============================================================
+//  Screen
+// ===============================================================
 Screen::Screen() {
   this->screen = new Adafruit_ILI9341(SCREEN_TFTCS_PIN, SCREEN_TFTDC_PIN);
 }
@@ -20,11 +22,8 @@ void Screen::init() {
     return;
   }
 
-  //this->bmpDraw("all.bmp", 0, 0);
-  //this->simpleBmpDraw("1234.bmp", 0, 0);
-
-  this->screen->setRotation(45);
-  this->simpleBmpDraw("fb.bmp", 80, 41);
+  this->setBattery(BATTERY_FULL);
+  this->drawBattery();
 
   //this->snap(true);
   //this->homecare(true);
@@ -35,13 +34,39 @@ void Screen::init() {
     Serial.println(F("DONE"));
 }
 
+
+//  Battery (FB = full, HB = half, EB = empty, CB = charging)
+// ===============================================================
+void Screen::setBattery(int state) {
+  this->batteryState = state;
+}
+void Screen::drawBattery() {
+  this->screen->setRotation(45);
+  switch (this->batteryState) {
+    case BATTERY_FULL:
+      this->simpleBmpDraw("fb.bmp", 80, 41);
+      break;
+    case BATTERY_HALF:
+      this->simpleBmpDraw("hb.bmp", 80, 41);
+      break;
+    case BATTERY_EMPTY:
+      this->simpleBmpDraw("eb.bmp", 80, 41);
+      break;
+    case BATTERY_CHARGING:
+      this->simpleBmpDraw("cb.bmp", 80, 41);
+      break;
+  }
+}
+
+
+//  Notifications
+// ===============================================================
 void Screen::homecare(bool on) {
   this->screen->setRotation(135);
-  if (on == true) {
+  if (on == true)
     this->simpleBmpDraw("grn.bmp", 77, 0);
-  } else {
-    this->screen->fillRect(77, 0, 166, 41, ILI9341_BLACK);  
-  }
+  else
+    this->screen->fillRect(77, 0, 166, 41, ILI9341_BLACK);
 }
 void Screen::snap(bool on) {
   this->screen->setRotation(45);
@@ -50,27 +75,27 @@ void Screen::snap(bool on) {
     this->simpleBmpDraw("cat.bmp", 80, 41);
   } else {
     this->screen->fillRect(77, 0, 166, 41, ILI9341_BLACK);
-    this->simpleBmpDraw("fb.bmp", 80, 41);
+    this->drawBattery();
   }
 }
 void Screen::menu(bool on) {
   this->screen->setRotation(90);
-  if (on == true) {
+  if (on == true)
     this->simpleBmpDraw("red.bmp", 37, 40);
-  } else {
+  else
     this->screen->fillRect(37, 40, 166, 41, ILI9341_BLACK);  
-  }
 }
 void Screen::activity(bool on) {
   this->screen->setRotation(0);
-  if (on == true) {
+  if (on == true)
     this->simpleBmpDraw("blu.bmp", 37, 40);
-  } else {
+  else
     this->screen->fillRect(37, 40, 166, 41, ILI9341_BLACK);  
-  }
 }
 
-// BMP Draw
+
+//  Bitmap draw
+// ===============================================================
 /*
 void Screen::simpleBmpDraw(char *filename, uint8_t x, uint16_t y) {
   File     bmpFile;

@@ -48,7 +48,11 @@ void loop() {
   Button button = radio.listener();
 
   if (button.remote == 14177786) {
-    // Button 1: Home care
+    
+    //  Notification control
+    // ===============================================================
+    
+    // Home care
     if ((button.channel == 12) && (button.state == 1)) {
       leds.homecare(true);
       screen.homecare(true);
@@ -58,7 +62,7 @@ void loop() {
       screen.homecare(false);
     }
     
-    // Button 2: Snap
+    // Snap
     if ((button.channel == 13) && (button.state == 1)) {
       leds.snap(true);
       screen.snap(true);
@@ -68,7 +72,7 @@ void loop() {
       screen.snap(false);
     }
     
-    // Button 3: Menu
+    // Menu
     if ((button.channel == 14) && (button.state == 1)) {
       leds.menu(true);
       screen.menu(true);
@@ -78,7 +82,7 @@ void loop() {
       screen.menu(false);
     }
 
-    // Button 4: Activity
+    // Activity
     if ((button.channel == 15) && (button.state == 1)) {
       leds.activity(true);
       screen.activity(true);
@@ -88,13 +92,48 @@ void loop() {
       screen.activity(false);
     }
 
-    // Other
-    if ((button.channel == 8) && (button.state == 1))
-      leds.blink(0, 255, 0);
-    if ((button.channel == 9) && (button.state == 1))
-      leds.blink(255, 0, 0);
+    //  All off / on
+    // ===============================================================
+    if ((button.channel == 16) && (button.state == 1)) {
+      leds.homecare(true);
+      screen.homecare(true);
+      leds.snap(true);
+      screen.snap(true);
+      leds.menu(true);
+      screen.menu(true);
+      leds.activity(true);
+      screen.activity(true);
+    }
+    if ((button.channel == 16) && (button.state == 0)) {
+      leds.homecare(false);
+      screen.homecare(false);
+      leds.snap(false);
+      screen.snap(false);
+      leds.menu(false);
+      screen.menu(false);
+      leds.activity(false);
+      screen.activity(false);
+    }
+    
 
-    // FB | HB | EB | CB
+    //  Battery control
+    // ===============================================================
+    if ((button.channel == 8) && (button.state == 1)) {
+      screen.setBattery(BATTERY_FULL);
+      screen.drawBattery();
+    }
+    if ((button.channel == 9) && (button.state == 1)) {
+      screen.setBattery(BATTERY_HALF);
+      screen.drawBattery();
+    }
+    if ((button.channel == 10) && (button.state == 1)) {
+      screen.setBattery(BATTERY_EMPTY);
+      screen.drawBattery();
+    }
+    if ((button.channel == 11) && (button.state == 1)) {
+      screen.setBattery(BATTERY_CHARGING);
+      screen.drawBattery();
+    }
 
     delay(RADIO_DELAY);
     Serial.println(freeMemory());
